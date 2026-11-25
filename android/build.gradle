@@ -21,7 +21,17 @@ allprojects {
 }
 
 apply plugin: "com.android.library"
-apply plugin: "org.jetbrains.kotlin.android"
+// Apply KGP only when AGP does not provide built-in Kotlin (AGP 9+).
+// Fork patch for AGP 9.x compatibility (mos).
+def agpMajor = 0
+try {
+    agpMajor = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')[0].toInteger()
+} catch (ignored) {
+    agpMajor = 0
+}
+if (agpMajor < 9) {
+    apply plugin: "org.jetbrains.kotlin.android"
+}
 
 android {
     namespace = "com.example.image_gallery_saver_plus"
